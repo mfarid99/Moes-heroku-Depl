@@ -30,6 +30,9 @@ const morgan = require("morgan");
 ///////////////////////////////
 
 //set view engine to express-react-views
+
+const Metallica = require("./models/metallicafanpage.js");
+
 app.set("view engine", "jsx");
 app.engine("jsx", require("express-react-views").createEngine());
 
@@ -54,12 +57,70 @@ app.use(morgan("tiny")); //logging
 ///////////////
 //Routes and Routers
 //////////////
-app.get("/", (req, res) => {
-  res.render("index.jsx", { hello: "Hello World" });
+
+//INDEX..
+app.get("/metallicafanpage", (req, res) => {
+  Metallica.find({}, (error, allMetallicas) => {
+
+  res.render("index.jsx", { metallicas: allMetallicas });
 });
 
 app.use("/auth", authRouter);
 app.use("/test", testRouter);
+
+//NEW
+
+app.get("/metallicafanpage/new", (req, res) => {
+  res.render("New")
+})
+
+//DESTROY
+app.delete("/metallicafanpage/:id", (req, res) => {
+  Metallica.findByIdAndRemove(req.params.id, (err, data) => {
+    res.redirect("/metallicafanpage");
+  });
+});
+})
+
+//UPDATE
+
+app.put("/metallicafanpage/:id", (req, res) => {
+  if (req.body.readyToEat === "on") {
+    req.body.readyToEat = true;
+  } else {
+    req.body.readyToEat = false;
+  }
+
+  Metallica.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true },
+    (err, updatedModel) => {
+      res.redirect("/metallicafanpage");
+    }
+  );
+});
+
+// CREATE
+app.post("/metallicafanpage/", (req, res) => {
+  if (req.body.readyToEat === "on") {
+    req.body.readyToEat = true;
+  } else {
+    req.body.readyToEat = false;
+  }
+  Metallica.create(req.body, (error, metallica) => {
+    // res.send(fruit);
+    res.redirect("/metallicafanpage");
+  });
+});
+
+// EDIT
+app.get("/metallicafanpage/:id/edit", (req, res) => {
+  Metallica.findById(req.params.id, (err, foundMetallica) => {
+    res.render("edit.jsx", { metallica: foundMetallica });
+  });
+});
+
 
 ////////////////////////
 //APP LISTENER

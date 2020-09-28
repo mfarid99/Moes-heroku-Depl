@@ -1,3 +1,20 @@
 h1 {
     color: red;
 }
+
+body {
+    background-color: rgb(245, 212, 212);
+}
+
+.coverImg {
+    height: 100vh;
+    object-fit: cover;
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+a {
+    margin-left: 14em;
+    color: cornsilk;
+}

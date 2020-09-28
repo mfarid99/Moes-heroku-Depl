@@ -11,7 +11,8 @@ class Layout extends React.Component {
         </head>
         <body>
           <header>
-            <h1>This is the page header</h1>
+            <h1>Metallica Fan Page</h1>
+            
           </header>
           <main>{this.props.children}</main>
           <footer>
